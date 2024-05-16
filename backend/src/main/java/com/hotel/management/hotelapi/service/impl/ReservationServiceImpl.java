@@ -88,6 +88,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public HttpStatus deleteReservation(int id){
         ReservationDto currentReservation = getReservationById(id);
+        RoomEntity room = roomRepository.findById(currentReservation.getRoomId()).orElseThrow(() -> new ReservationNotFoundException("Room associated with this id was not found!"));
 
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime checkInDate = LocalDateTime.parse(currentReservation.getCheckIn());
@@ -96,6 +97,10 @@ public class ReservationServiceImpl implements ReservationService {
 
         if(hoursDifference >= 2) {
             reservationRepository.deleteById(id);
+
+            room.setAvailable(true);
+
+            roomRepository.save(room);
 
             return HttpStatus.OK;
         }
