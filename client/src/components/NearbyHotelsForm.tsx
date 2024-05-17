@@ -1,4 +1,4 @@
-import { Checkbox, Container, FormControlLabel, Grid, TextField, Typography } from "@mui/material"
+import { Checkbox, Container, FormControlLabel, Grid, TextField } from "@mui/material"
 import { ChangeEvent, useEffect, useState } from "react"
 import { Hotels } from "./Hotels";
 import useHotelsNearby from "../hooks/useHotelsNearby";
