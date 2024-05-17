@@ -1,11 +1,15 @@
-Backend and frontend application for a hotel management app.
+Hotel Management Application
+This project is a full-stack hotel management application developed with Spring Boot for the backend and React with Material-UI for the frontend. It provides a seamless experience for users to search, book, and manage hotel rooms efficiently.
 
-The technologies I used were Springboot and React and I have made a web application with the following criteria:
-
-• the user specifies a radius in kilometers to find all the nearby hotels
-• the application lists and displays all hotels found
-• the user can select a specific hotel and see all available rooms alongside their prices
-• after this, the user can book one, or more of the available rooms
-• the application allows the user to cancel their reservation or change the booked room at least
-two hours before the check-in
-• user can leave a feedback (services, cleanliness, etc)
+Features
+Search Nearby Hotels: Users can specify a radius in kilometers to find all nearby hotels.
+Hotel Listings: The application lists and displays all hotels found within the specified radius.
+Room Details: Users can select a specific hotel to view all available rooms along with their prices.
+Room Booking: Users can book one or more of the available rooms.
+Reservation Management: Users can cancel their reservation or change the booked room at least two hours before check-in.
+Feedback System: Users can leave feedback on services, cleanliness, and more.
+Technologies Used
+Backend: Spring Boot
+Frontend: React
+Styling: Material-UI
+Database: Postgresql
