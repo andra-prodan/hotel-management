@@ -68,15 +68,21 @@ public class ReservationServiceImpl implements ReservationService {
 
         if(hoursDifference >= 2){
         ReservationEntity newReservation = new ReservationEntity();
-        RoomEntity room = roomRepository.findById(reservationDto.getRoomId()).orElseThrow(() -> new ReservationNotFoundException("Room associated with this id was not found!"));
+        RoomEntity newRoom = roomRepository.findById(reservationDto.getRoomId()).orElseThrow(() -> new ReservationNotFoundException("Room associated with this id was not found!"));
+        RoomEntity oldRoom = roomRepository.findById(currentReservation.getRoomId()).orElseThrow(() -> new ReservationNotFoundException("Room associated with this id was not found!"));
 
         newReservation.setId(id);
         newReservation.setCheckIn(LocalDateTime.parse(currentReservation.getCheckIn()));
         newReservation.setCheckOut(LocalDateTime.parse(currentReservation.getCheckOut()));
 
 
-        newReservation.setRoom(room);
+        newReservation.setRoom(newRoom);
 
+        newRoom.setAvailable(false);
+        oldRoom.setAvailable(true);
+
+        roomRepository.save(newRoom);
+        roomRepository.save(oldRoom);
         reservationRepository.save(newReservation);
 
         return reservationDto;
@@ -87,24 +93,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public HttpStatus deleteReservation(int id){
-        ReservationDto currentReservation = getReservationById(id);
-        RoomEntity room = roomRepository.findById(currentReservation.getRoomId()).orElseThrow(() -> new ReservationNotFoundException("Room associated with this id was not found!"));
-
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime checkInDate = LocalDateTime.parse(currentReservation.getCheckIn());
-
-        long hoursDifference = ChronoUnit.HOURS.between(currentDate, checkInDate);
-
-        if(hoursDifference >= 2) {
             reservationRepository.deleteById(id);
 
-            room.setAvailable(true);
-
-            roomRepository.save(room);
-
             return HttpStatus.OK;
-        }
-
-        return HttpStatus.BAD_REQUEST;
     }
 }

@@ -1,21 +1,29 @@
 package com.hotel.management.hotelapi.controllers;
 
 import com.hotel.management.hotelapi.dto.ReservationDto;
+import com.hotel.management.hotelapi.dto.RoomDto;
 import com.hotel.management.hotelapi.service.ReservationService;
+import com.hotel.management.hotelapi.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations/")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final RoomService roomService;
 
     @Autowired
-    public ReservationController(ReservationService reservationService){ this.reservationService = reservationService;}
+    public ReservationController(ReservationService reservationService, RoomService roomService){
+        this.reservationService = reservationService;
+        this.roomService = roomService;
+    }
 
     @GetMapping("")
     public ResponseEntity<List<ReservationDto>> getAllReservations(){
@@ -40,6 +48,21 @@ public class ReservationController {
 
     @DeleteMapping("delete/{id}")
     public HttpStatus deleteReservation(@PathVariable int id){
-        return reservationService.deleteReservation(id);
+        ReservationDto currentReservation = reservationService.getReservationById(id);
+
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime checkInDate = LocalDateTime.parse(currentReservation.getCheckIn());
+
+        long hoursDifference = ChronoUnit.HOURS.between(currentDate, checkInDate);
+
+        if(hoursDifference >= 2) {
+            RoomDto newRoomEntity = roomService.getRoomById(currentReservation.getRoomId());
+            newRoomEntity.setAvailable(true);
+            roomService.updateRoom(currentReservation.getRoomId(), newRoomEntity);
+
+            return reservationService.deleteReservation(id);
+        }
+
+        return HttpStatus.BAD_REQUEST;
     }
 }

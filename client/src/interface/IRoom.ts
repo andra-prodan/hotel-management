@@ -1,4 +1,4 @@
-interface IRoom {
+export interface IRoom {
   id: number;
   roomNumber: number;
   type: string;

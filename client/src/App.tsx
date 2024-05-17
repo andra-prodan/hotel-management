@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import './App.css'
 import MainPage from './pages/MainPage'
 import HotelPage from './pages/HotelPage'
+import BookingsPage from './pages/BookingsPage'
+import HotelReviewsPage from './pages/HotelReviewsPage'
 
 function App() {
   const router = createBrowserRouter([
@@ -12,7 +13,18 @@ function App() {
     {
       path: "/hotel/:hotelId",
       element: <HotelPage />
-
+    },
+    {
+      path: "/hotel/:hotelId/change/:reservationId",
+      element: <HotelPage change={true} />
+    },
+    {
+      path: "/bookings",
+      element: <BookingsPage />
+    },
+    {
+      path: "/hotel/feedback/:hotelId",
+      element: <HotelReviewsPage />
     }
   ])
 

@@ -1,7 +1,13 @@
 import { NearbyHotelsForm } from "../components/NearbyHotelsForm"
+import { Nav } from "../components/Nav";
 
 const MainPage = () => {
-    return <NearbyHotelsForm />
+    return (
+        <>
+            <Nav />
+            <NearbyHotelsForm />
+        </>
+    )
 }
 
 export default MainPage;

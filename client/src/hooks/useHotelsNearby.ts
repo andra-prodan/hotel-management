@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import hotelsService from "../services/hotels";
+import hotelsService from "../services/hotelsService";
+import { IHotel } from "../interface/IHotel";
 
 const useHotelsNearby = (kmValue: string) => {
   const [hotels, setHotels] = useState<IHotel[]>([]);
@@ -19,22 +20,20 @@ const useHotelsNearby = (kmValue: string) => {
   }, []);
 
   useEffect(() => {
-    const queryParams = new URLSearchParams({
-      latitude: String(latitude),
-      longitude: String(longitude),
-      userDistanceInKm: kmValue == "" ? "0" : kmValue,
-    });
-
     const fetchData = async () => {
+      const queryParams = new URLSearchParams({
+        latitude: String(latitude),
+        longitude: String(longitude),
+        userDistanceInKm: kmValue == "" ? "0" : kmValue,
+      });
       const data = await hotelsService().getHotelsNearby(queryParams);
-
-      setHotels(data);
+      if (!data.error) setHotels(data);
     };
 
     fetchData();
   }, [kmValue, latitude, longitude]);
 
-  return hotels;
+  return { hotels };
 };
 
 export default useHotelsNearby;
